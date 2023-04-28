@@ -1,5 +1,5 @@
 import csvToJson from 'csvtojson';
-import { ClimateRiskData } from '../interfaces';
+import { ClimateRiskData } from '../interfaces'; 
 
 export async function loadClimateRiskData(): Promise<ClimateRiskData[]> {
   const response = await fetch('/data/risk_viz_sample_data.csv');
