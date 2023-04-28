@@ -1,15 +1,15 @@
 'use client'
 
 import { LoadScript, GoogleMap, Marker, InfoWindow } from "@react-google-maps/api"
-import { State } from "../../interfaces"
+import { State, initialData } from "../../interfaces"
 import getMarkerIcon from "../../utils/getMarkerIcon.util"
-import { initialData, useStore } from "@/store"
+import { useStore } from "@/store"
 import { DECADES, DEFAULT_CENTER, MAP_STYLES } from "@/constants"
 
-export default function RiskMap() { 
+export default function RiskMap() {
     const selectedDecade = useStore((state: State) => state.selectedDecade)
     const selectedAsset = useStore((state: State) => state.selectedAsset)
-    const filteredDataByYear = useStore((state: State) => state.filteredDataByYear) 
+    const filteredDataByYear = useStore((state: State) => state.filteredDataByYear)
     const setSelectedDecade = useStore((state: State) => state.setSelectedDecade)
     const setSelectedAsset = useStore((state: State) => state.setSelectedAsset)
 

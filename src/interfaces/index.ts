@@ -23,6 +23,16 @@ export interface State extends Action {
     climateRiskData: ClimateRiskData[]
 }
 
+export const initialData: ClimateRiskData = {
+    'Asset Name': '',
+    'Lat': '',
+    'Long': '',
+    'Business Category': '',
+    'Risk Rating': 0,
+    'Risk Factors': '',
+    'Year': 0,
+}
+
 export type Action = {
     setSelectedDecade: (selectedDecade: State['selectedDecade']) => void
     setSelectedAsset: (selectedAsset: State['selectedAsset']) => void
