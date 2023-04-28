@@ -1,0 +1,1 @@
+export const DECADES = [2030, 2040, 2050, 2060, 2070]
