@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import RiskMap from '@/components/RiskMap'
-import Graph from '@/components/Graph'
 import { useStore } from '@/store'
 import DataTable from '@/components/DataTable'
 import { loadClimateRiskData } from '@/utils/loadClimateRiskData.util'
@@ -38,10 +38,9 @@ export default function Home() {
   }
 
   return (
-    <>
-      <DataTable />
-      <Graph />
+    <div className='flex'>
       <RiskMap />
-    </>
+      <DataTable />
+    </div>
   )
 } 

@@ -4,25 +4,15 @@ import { LoadScript, GoogleMap, Marker, InfoWindow } from "@react-google-maps/ap
 import { State, initialData } from "../../interfaces"
 import getMarkerIcon from "../../utils/getMarkerIcon.util"
 import { useStore } from "@/store"
-import { DECADES, DEFAULT_CENTER, MAP_STYLES } from "@/constants"
+import { DEFAULT_CENTER, MAP_STYLES } from "@/constants"
 
 export default function RiskMap() {
-    const selectedDecade = useStore((state: State) => state.selectedDecade)
-    const selectedAsset = useStore((state: State) => state.selectedAsset)
     const filteredDataByYear = useStore((state: State) => state.filteredDataByYear)
-    const setSelectedDecade = useStore((state: State) => state.setSelectedDecade)
     const setSelectedAsset = useStore((state: State) => state.setSelectedAsset)
+    const selectedAsset = useStore((state: State) => state.selectedAsset)
 
     return (
-        <div>
-            <select value={selectedDecade} onChange={(e) => setSelectedDecade(parseInt(e.target.value))}>
-                {DECADES.map((decade) => (
-                    <option key={decade} value={decade}>
-                        {decade}
-                    </option>
-                ))}
-            </select>
-
+        <div className="flex flex-[1] h-screen">
             <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ''}>
                 <GoogleMap mapContainerStyle={MAP_STYLES} zoom={2} center={DEFAULT_CENTER} options={{ gestureHandling: "greedy" }}>
                     {filteredDataByYear.map((dataPoint, index) => (
@@ -33,14 +23,12 @@ export default function RiskMap() {
                             onClick={() => setSelectedAsset(dataPoint)}
                         />
                     ))}
-                    {selectedAsset && (
-                        <InfoWindow position={{ lat: parseFloat(selectedAsset.Lat), lng: parseFloat(selectedAsset.Long) }} onCloseClick={() => setSelectedAsset(initialData)}>
-                            <>
-                                <h2>{selectedAsset['Asset Name']}</h2>
-                                <p>{selectedAsset['Business Category']}</p>
-                            </>
-                        </InfoWindow>
-                    )}
+                    {selectedAsset && <InfoWindow position={{ lat: parseFloat(selectedAsset.Lat), lng: parseFloat(selectedAsset.Long) }} onCloseClick={() => setSelectedAsset(initialData)}>
+                        <>
+                            <h2>{selectedAsset['Asset Name']}</h2>
+                            <p>{selectedAsset['Business Category']}</p>
+                        </>
+                    </InfoWindow>}
                 </GoogleMap>
             </LoadScript>
         </div>

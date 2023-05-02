@@ -9,7 +9,7 @@ export const RISK_FACTORS = [
     'Flooding'
 ]
 
-export const MAX_PAGE_CONTENT_NUMBER = 30
+export const MAX_PAGE_CONTENT_NUMBER = 10
 
 export const DEFAULT_CENTER = {
     lat: 0,

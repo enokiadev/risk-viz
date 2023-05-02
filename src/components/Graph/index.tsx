@@ -26,16 +26,12 @@ const Graph: FC = () => {
     if (!dataToRenderOnGraph) return (<></>)
 
     return (
-        <>
-            <p>{selectedAsset['Asset Name']}</p>
-            <p>{selectedAsset['Business Category']}</p>
-            <LineChart width={1000} height={200} data={dataToRenderOnGraph}>
-                <Line dataKey="Risk Rating" dot stroke="green" />
-                <XAxis dataKey='Year' />
-                <YAxis dataKey='Risk Rating' />
-                <Tooltip />
-            </LineChart>
-        </>
+        <LineChart width={700} className='text-sm' height={300} data={dataToRenderOnGraph}>
+            <Line dataKey="Risk Rating" dot stroke="green" />
+            <XAxis dataKey='Year' />
+            <YAxis dataKey='Risk Rating' />
+            <Tooltip />
+        </LineChart>
     )
 }
 
