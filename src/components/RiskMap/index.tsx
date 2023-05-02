@@ -29,9 +29,7 @@ export default function RiskMap() {
                         <Marker
                             key={index}
                             position={{ lat: parseFloat(dataPoint.Lat), lng: parseFloat(dataPoint.Long) }}
-                            icon={{
-                                url: getMarkerIcon(dataPoint['Risk Rating']),
-                            }}
+                            icon={{ url: getMarkerIcon(dataPoint['Risk Rating']) }}
                             onClick={() => setSelectedAsset(dataPoint)}
                         />
                     ))}

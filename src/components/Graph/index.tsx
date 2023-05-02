@@ -1,21 +1,41 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { FC } from 'react';
-import { LineChart, Line, XAxis, Tooltip } from 'recharts';
+import { FC, useEffect, useState } from 'react';
+import { LineChart, Line, Tooltip, XAxis, YAxis } from 'recharts';
 import { useStore } from '@/store';
+import { ClimateRiskData, State } from '@/interfaces';
 
 const Graph: FC = () => {
-    const filteredDataByYear = useStore(state => state.filteredDataByYear)
+    const selectedAsset = useStore((state: State) => state.selectedAsset)
+    const climateRiskData = useStore(state => state.climateRiskData)
+    const [dataToRenderOnGraph, setDataToRenderOnGraph] = useState<ClimateRiskData[]>([])
+
+    useEffect(() => {
+        if (!dataToRenderOnGraph) return
+
+        const filteredData = climateRiskData.flat().filter(item => {
+            if (item.Lat === selectedAsset.Lat && item.Long === selectedAsset.Long && item['Asset Name'] === selectedAsset['Asset Name'])
+                return true;
+            return false
+        }).sort((a, b) => a.Year - b.Year);
+
+        setDataToRenderOnGraph(filteredData)
+    }, [climateRiskData, selectedAsset])
+
+    if (!dataToRenderOnGraph) return (<></>)
 
     return (
-        <LineChart width={1000} height={200} data={filteredDataByYear}>
-            <Line dataKey="Lat" dot={false} stroke="red" />
-            <Line dataKey="Long" dot={false} stroke="orange" />
-            <Line dataKey="Risk Rating" dot={false} stroke="green" />
-            <Line dataKey="Business Category" dot={false} stroke="blue" />
-            <Line dataKey="Asset Name" dot={false} stroke="blue" />
-            <Tooltip />
-        </LineChart>
+        <>
+            <p>{selectedAsset['Asset Name']}</p>
+            <p>{selectedAsset['Business Category']}</p>
+            <LineChart width={1000} height={200} data={dataToRenderOnGraph}>
+                <Line dataKey="Risk Rating" dot stroke="green" />
+                <XAxis dataKey='Year' />
+                <YAxis dataKey='Risk Rating' />
+                <Tooltip />
+            </LineChart>
+        </>
     )
 }
 
