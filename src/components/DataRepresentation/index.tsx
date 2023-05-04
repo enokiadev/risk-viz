@@ -11,9 +11,9 @@ const DataRepresentation: FC = () => {
 
     return (
         <div className="flex-[1] p-5 lg:h-screen overflow-y-scroll">
+            <Graph />
             <DataTable />
             <RiskPieChart data={pieChartData} />
-            <Graph />
         </div>
     )
 }

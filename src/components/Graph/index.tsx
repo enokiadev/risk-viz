@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from 'react';
 import { LineChart, Line, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useStore } from '@/store';
 import { ClimateRiskData, State } from '@/interfaces';
-import React from 'react';
 
 const Graph: FC = () => {
     const selectedAsset = useStore((state: State) => state.selectedAsset)
@@ -26,7 +25,7 @@ const Graph: FC = () => {
     }, [climateRiskData, selectedAsset])
 
     return (
-        <div className='w-full my-20 relative h-[300px]'>
+        <div className='w-full mb-20 relative h-[300px]'>
             <h2 className='mb-5 font-bold'>Selected asset graph</h2>
             {dataToRenderOnGraph.length === 0 && <div className='bg-[#edededab] w-full h-full flex items-center justify-center absolute top-0 left-0'>
                 <p>Select an asset marker from the map to view the line graph data</p>
