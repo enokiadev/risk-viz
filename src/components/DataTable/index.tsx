@@ -8,7 +8,6 @@ import { useState, useEffect, FC } from 'react'
 const DataTable: FC = () => {
     const filteredDataByYear = useStore(state => state.filteredDataByYear)
     const selectedDecade = useStore((state: State) => state.selectedDecade)
-    const pieChartData = useStore((state: State) => state.pieChartData)
     const setSelectedDecade = useStore((state: State) => state.setSelectedDecade)
     const setPieChartData = useStore((state: State) => state.setPieChartData)
 
@@ -93,7 +92,8 @@ const DataTable: FC = () => {
     }, [filteredDataByYear, selectedAssetName, selectedBusinessCategory, selectedRiskFactor, selectedRiskFactorIndex, order])
 
     useEffect(() => {
-        setPieChartData(allPieChartData.slice(startIdx, endIdx))
+        // sets the data to be rendered on pie chart in the format { name: string, value: number}
+        setPieChartData(allPieChartData.slice(startIdx, endIdx)) 
     }, [startIdx, endIdx, allPieChartData])
 
     const handlePageClick = (page: number) => {
