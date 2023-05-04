@@ -3,26 +3,29 @@
 import { DECADES, RISK_FACTORS } from '@/constants'
 import { ClimateRiskData, State } from '@/interfaces'
 import { useStore } from '@/store'
-import React, { useState, useEffect, FC } from 'react'
+import { useState, useEffect, FC } from 'react'
 import Graph from '../Graph'
 
 const PAGE_SIZE = 10
+const ORDER = [
+    'ascending',
+    'descending'
+]
 
 const DataTable: FC = () => {
-    const [currentPage, setCurrentPage] = useState(1)
-    const [data, setData] = useState<ClimateRiskData[]>([])
-
-
     const filteredDataByYear = useStore(state => state.filteredDataByYear)
     const selectedDecade = useStore((state: State) => state.selectedDecade)
     const setSelectedDecade = useStore((state: State) => state.setSelectedDecade)
 
+    const [currentPage, setCurrentPage] = useState(1)
+    const [data, setData] = useState<ClimateRiskData[]>([])
     const [businessCategories, setBusinessCategories] = useState<string[]>([])
     const [assetNames, setAssetNames] = useState<string[]>([])
     const [selectedBusinessCategory, setSelectedBusinessCategory] = useState('All')
     const [selectedAssetName, setSelectedAssetName] = useState('All')
     const [selectedRiskFactorIndex, setSelectedRiskFactorIndex] = useState(0)
     const [selectedRiskFactor, setSelectedRiskFactor] = useState('All')
+    const [order, setOrder] = useState(ORDER[0])
 
     const startIdx = (currentPage - 1) * PAGE_SIZE
     const endIdx = startIdx + PAGE_SIZE
@@ -71,12 +74,16 @@ const DataTable: FC = () => {
                 filteredData = filteredData.filter(obj => obj["Asset Name"] === selectedAssetName)
             }
 
+            if (order === ORDER[0])
+                filteredData = filteredData.sort((a, b) => a['Risk Rating'] - b['Risk Rating'])
+            else filteredData = filteredData.sort((a, b) => b['Risk Rating'] - a['Risk Rating'])
+
             setData(filteredData)
             setCurrentPage(1)
         } catch (error) {
             console.error(error)
         }
-    }, [filteredDataByYear, selectedAssetName, selectedBusinessCategory, selectedRiskFactor, selectedRiskFactorIndex])
+    }, [filteredDataByYear, selectedAssetName, selectedBusinessCategory, selectedRiskFactor, selectedRiskFactorIndex, order])
 
     const handlePageClick = (page: number) => {
         setCurrentPage(page)
@@ -101,6 +108,16 @@ const DataTable: FC = () => {
             <div className="w-full flex-col flex">
                 <ul className="flex flex-wrap items-center gap-3 mb-10">
                     <li className="flex items-center text-sm whitespace-nowrap gap-2">
+                        <p>Order</p>
+                        <select className={styles.select} value={order} onChange={(e) => setOrder(e.target.value)}>
+                            {ORDER.map((order) => (
+                                <option key={order} value={order}>
+                                    {order}
+                                </option>
+                            ))}
+                        </select>
+                    </li>
+                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
                         <p>Current decade</p>
                         <select className={styles.select} value={selectedDecade} onChange={(e) => setSelectedDecade(parseInt(e.target.value))}>
                             {DECADES.map((decade) => (
@@ -109,7 +126,8 @@ const DataTable: FC = () => {
                                 </option>
                             ))}
                         </select>
-                    </li><li className="flex items-center text-sm whitespace-nowrap gap-2">
+                    </li>
+                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
                         <p>Business categories</p>
                         <select className={styles.select} value={selectedBusinessCategory} onChange={event => setSelectedBusinessCategory(event.target.value)}>
                             {businessCategories.map((item: string, index: number) => <option key={index}>{item}</option>)}
