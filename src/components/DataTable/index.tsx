@@ -93,8 +93,8 @@ const DataTable: FC = () => {
 
     useEffect(() => {
         // sets the data to be rendered on pie chart in the format { name: string, value: number}
-        setPieChartData(allPieChartData.slice(startIdx, endIdx)) 
-    }, [startIdx, endIdx, allPieChartData])
+        setPieChartData(allPieChartData.slice(startIdx, endIdx))
+    }, [allPieChartData, endIdx, setPieChartData, startIdx])
 
     const handlePageClick = (page: number) => {
         setCurrentPage(page)

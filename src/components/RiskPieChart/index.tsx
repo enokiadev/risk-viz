@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from "recharts"
 
 
 const RiskPieChart: FC<IRiskPieChart> = (props) => {
+  // renders a label with the percentage on the pie chart
   const renderCustomizedLabel = (values: CustomLabel) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, percent } = values
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5

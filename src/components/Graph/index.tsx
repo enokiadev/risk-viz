@@ -32,11 +32,11 @@ const Graph: FC = () => {
             </div>}
             <ResponsiveContainer className='-ml-5'>
                 <LineChart width={700} className='text-sm' height={300} data={dataToRenderOnGraph}>
-                <Line dataKey="Risk Rating" dot stroke="green" />
-                <XAxis dataKey='Year' />
-                <YAxis dataKey='Risk Rating' />
-                <Tooltip />
-            </LineChart>
+                    <Line dataKey="Risk Rating" dot stroke="green" />
+                    <XAxis dataKey='Year' />
+                    <YAxis dataKey='Risk Rating' />
+                    <Tooltip />
+                </LineChart>
             </ResponsiveContainer>
         </div>
     )
