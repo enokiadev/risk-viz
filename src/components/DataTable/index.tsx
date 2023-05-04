@@ -1,16 +1,10 @@
 'use client'
 
-import { DECADES, RISK_FACTORS } from '@/constants'
+import { DECADES, ORDER, MAX_TABLE_PAGE_SIZE, RISK_FACTORS } from '@/constants'
 import { ClimateRiskData, State } from '@/interfaces'
 import { useStore } from '@/store'
 import { useState, useEffect, FC } from 'react'
 import Graph from '../Graph'
-
-const PAGE_SIZE = 10
-const ORDER = [
-    'ascending',
-    'descending'
-]
 
 const DataTable: FC = () => {
     const filteredDataByYear = useStore(state => state.filteredDataByYear)
@@ -27,10 +21,10 @@ const DataTable: FC = () => {
     const [selectedRiskFactor, setSelectedRiskFactor] = useState('All')
     const [order, setOrder] = useState(ORDER[0])
 
-    const startIdx = (currentPage - 1) * PAGE_SIZE
-    const endIdx = startIdx + PAGE_SIZE
+    const startIdx = (currentPage - 1) * MAX_TABLE_PAGE_SIZE
+    const endIdx = startIdx + MAX_TABLE_PAGE_SIZE
     const currentData = data.slice(startIdx, endIdx)
-    const totalPages = Math.ceil(data.length / PAGE_SIZE)
+    const totalPages = Math.ceil(data.length / MAX_TABLE_PAGE_SIZE)
 
     useEffect(() => {
         if (filteredDataByYear) {

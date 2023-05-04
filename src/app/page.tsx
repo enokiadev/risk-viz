@@ -36,9 +36,9 @@ export default function Home() {
   }
 
   return (
-    <div className='flex'>
-      <RiskMap />
+    <div className='lg:flex flex-row-reverse'>
       <DataTable />
+      <RiskMap />
     </div>
   )
 } 

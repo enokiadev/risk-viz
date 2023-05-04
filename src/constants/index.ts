@@ -20,3 +20,10 @@ export const MAP_STYLES = {
     width: '100%',
     height: '100vh',
 }
+
+export const MAX_TABLE_PAGE_SIZE = 10
+
+export const ORDER = [
+    'ascending',
+    'descending'
+]
