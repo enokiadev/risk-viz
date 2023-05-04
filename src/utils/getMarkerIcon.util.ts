@@ -2,11 +2,11 @@
 export default function getMarkerIcon(riskRating: number) {
     let markerColor;
 
-    if (riskRating < 0.25) {
+    if (Number(riskRating) < 0.25) {
         markerColor = 'green';
-    } else if (riskRating < 0.5) {
+    } else if (Number(riskRating) < 0.5 && Number(riskRating) > 0.25) {
         markerColor = 'yellow';
-    } else if (riskRating < 0.75) {
+    } else if (Number(riskRating) < 0.75 && Number(riskRating) > 0.5) {
         markerColor = 'orange';
     } else {
         markerColor = 'red';
