@@ -1,3 +1,4 @@
+// Returns a marker icon URL based on the provided risk rating. The icon's color varies depending on the rating's value
 export default function getMarkerIcon(riskRating: number) {
     let markerColor;
 

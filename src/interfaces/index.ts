@@ -33,7 +33,7 @@ export const initialData: ClimateRiskData = {
     'Year': 0,
 }
 
-export type Action = {
+export interface Action {
     setSelectedDecade: (selectedDecade: State['selectedDecade']) => void
     setSelectedAsset: (selectedAsset: State['selectedAsset']) => void
     setFilteredDataByYear: (filteredDataByYear: State['filteredDataByYear']) => void

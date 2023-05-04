@@ -29,9 +29,7 @@ export default function Home() {
       setClimateRiskData(data)
       setFilteredDataByYear(climateRiskData.filter((dataPoint) => {
         return Math.floor(dataPoint.Year / 10) * 10 === selectedDecade
-      }))
-
-      console.log('data ->', data)
+      })) // Filters climateRiskData by selectedDecade to set filteredDataByYear
     } catch (error) {
       console.error('Error loading data:', error)
     }
