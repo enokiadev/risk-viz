@@ -16,6 +16,10 @@ export const DEFAULT_CENTER = {
     lng: 0,
 }
 
+export const RADIAN = Math.PI / 180
+
+export const PIE_CHART_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'red', 'black', 'blue']
+
 export const MAP_STYLES = {
     width: '100%',
     height: '100vh',

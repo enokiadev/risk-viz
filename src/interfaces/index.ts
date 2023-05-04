@@ -21,6 +21,27 @@ export interface State extends Action {
     selectedAsset: ClimateRiskData
     filteredDataByYear: ClimateRiskData[]
     climateRiskData: ClimateRiskData[]
+    pieChartData: IRiskPieChartData[]
+}
+
+export interface CustomLabel {
+    cx: number,
+    cy: number
+    midAngle: number
+    innerRadius: number
+    outerRadius: number
+    percent: number
+    index: number
+    name: string
+}
+
+export interface IRiskPieChart {
+    data: IRiskPieChartData[]
+}
+
+export interface IRiskPieChartData {
+    name: string;
+    value: number;
 }
 
 export const initialData: ClimateRiskData = {
@@ -33,9 +54,15 @@ export const initialData: ClimateRiskData = {
     'Year': 0,
 }
 
+export const initialPieChartData: IRiskPieChartData = {
+    name: '',
+    value: 0
+}
+
 export interface Action {
     setSelectedDecade: (selectedDecade: State['selectedDecade']) => void
     setSelectedAsset: (selectedAsset: State['selectedAsset']) => void
     setFilteredDataByYear: (filteredDataByYear: State['filteredDataByYear']) => void
     setClimateRiskData: (climateRiskData: State['climateRiskData']) => void
+    setPieChartData: (climateRiskData: State['pieChartData']) => void
 }

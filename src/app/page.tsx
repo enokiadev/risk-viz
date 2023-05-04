@@ -3,9 +3,10 @@
 
 import RiskMap from '@/components/RiskMap'
 import { useStore } from '@/store'
-import DataTable from '@/components/DataTable'
+import DataTable from '@/components/DataRepresentation'
 import { loadClimateRiskData } from '@/utils/loadClimateRiskData.util'
 import { useEffect } from 'react'
+import DataRepresentation from '@/components/DataRepresentation'
 
 export default function Home() {
   const setClimateRiskData = useStore(state => state.setClimateRiskData)
@@ -37,7 +38,7 @@ export default function Home() {
 
   return (
     <div className='lg:flex flex-row-reverse'>
-      <DataTable />
+      <DataRepresentation />
       <RiskMap />
     </div>
   )

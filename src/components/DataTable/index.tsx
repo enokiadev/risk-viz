@@ -4,15 +4,17 @@ import { DECADES, ORDER, MAX_TABLE_PAGE_SIZE, RISK_FACTORS } from '@/constants'
 import { ClimateRiskData, State } from '@/interfaces'
 import { useStore } from '@/store'
 import { useState, useEffect, FC } from 'react'
-import Graph from '../Graph'
 
 const DataTable: FC = () => {
     const filteredDataByYear = useStore(state => state.filteredDataByYear)
     const selectedDecade = useStore((state: State) => state.selectedDecade)
+    const pieChartData = useStore((state: State) => state.pieChartData)
     const setSelectedDecade = useStore((state: State) => state.setSelectedDecade)
+    const setPieChartData = useStore((state: State) => state.setPieChartData)
 
     const [currentPage, setCurrentPage] = useState(1)
     const [data, setData] = useState<ClimateRiskData[]>([])
+    const [allPieChartData, setAllPieChartData] = useState<{ name: string; value: number; }[]>([])
     const [businessCategories, setBusinessCategories] = useState<string[]>([])
     const [assetNames, setAssetNames] = useState<string[]>([])
     const [selectedBusinessCategory, setSelectedBusinessCategory] = useState('All')
@@ -75,12 +77,24 @@ const DataTable: FC = () => {
                 filteredData = filteredData.sort((a, b) => a['Risk Rating'] - b['Risk Rating'])
             else filteredData = filteredData.sort((a, b) => b['Risk Rating'] - a['Risk Rating'])
 
+            const filteredPieChartData = filteredData.map(item => {
+                return {
+                    name: item['Asset Name'],
+                    value: parseFloat(item['Risk Rating'].toString())
+                }
+            })
+
             setData(filteredData)
             setCurrentPage(1)
+            setAllPieChartData(filteredPieChartData)
         } catch (error) {
             console.error(error)
         }
     }, [filteredDataByYear, selectedAssetName, selectedBusinessCategory, selectedRiskFactor, selectedRiskFactorIndex, order])
+
+    useEffect(() => {
+        setPieChartData(allPieChartData.slice(startIdx, endIdx))
+    }, [startIdx, endIdx, allPieChartData])
 
     const handlePageClick = (page: number) => {
         setCurrentPage(page)
@@ -102,85 +116,82 @@ const DataTable: FC = () => {
     }
 
     return (
-        <div className="flex-[1] p-5">
-            <div className="w-full flex-col flex">
-                <ul className="flex flex-wrap items-center gap-3 mb-10">
-                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
-                        <p>Order</p>
-                        <select className={styles.select} value={order} onChange={(e) => setOrder(e.target.value)}>
-                            {ORDER.map((order) => (
-                                <option key={order} value={order}>
-                                    {order}
-                                </option>
-                            ))}
-                        </select>
-                    </li>
-                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
-                        <p>Current decade</p>
-                        <select className={styles.select} value={selectedDecade} onChange={(e) => setSelectedDecade(parseInt(e.target.value))}>
-                            {DECADES.map((decade) => (
-                                <option key={decade} value={decade}>
-                                    {decade}
-                                </option>
-                            ))}
-                        </select>
-                    </li>
-                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
-                        <p>Business categories</p>
-                        <select className={styles.select} value={selectedBusinessCategory} onChange={event => setSelectedBusinessCategory(event.target.value)}>
-                            {businessCategories.map((item: string, index: number) => <option key={index}>{item}</option>)}
-                        </select>
-                    </li>
-                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
-                        <p>Asset names</p>
-                        <select className={styles.select} value={selectedAssetName} onChange={event => setSelectedAssetName(event.target.value)}>
-                            {assetNames.map((item: string, index: number) => <option key={index}>{item}</option>)}
-                        </select>
-                    </li>
-                    <li className="flex items-center text-sm whitespace-nowrap gap-2">
-                        <p>Risk factors</p>
-                        <select className={styles.select} value={selectedRiskFactor} onChange={event => setSelectedRiskFactor(event.target.value)}>
-                            {RISK_FACTORS.map((item: string, index: number) => <option key={index}>{item}</option>)}
-                        </select>
-                        <input type='range' value={selectedRiskFactorIndex} onChange={event => setSelectedRiskFactorIndex(Number(event.target.value))} max={1} min={0} step={0.1} />
-                        <b>{selectedRiskFactorIndex}</b>
-                    </li>
-                </ul>
-                <div className="flex flex-col">
-                    <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
-                        <div className="inline-block min-w-full">
-                            <div className="overflow-hidden">
-                                <table className="min-w-full">
-                                    <thead className="bg-white border-b">
-                                        <tr>
-                                            <th className={styles.th}>Asset name</th>
-                                            <th className={styles.th}>Business Category</th>
-                                            <th className={styles.th}>Lat</th>
-                                            <th className={styles.th}>Long</th>
-                                            <th className={styles.th}>Risk rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentData.map((item, index: number) => <tr key={index}>
-                                            <td className={styles.td}>{item["Asset Name"]}</td>
-                                            <td className={styles.td}>{item["Business Category"]}</td>
-                                            <td className={styles.td}>{item.Lat}</td>
-                                            <td className={styles.td}>{item.Long}</td>
-                                            <td className={styles.td}>{item["Risk Rating"]}</td>
-                                        </tr>)}
-                                    </tbody>
-                                </table>
-                            </div>
+        <div className="w-full flex-col flex">
+            <ul className="flex flex-wrap items-center gap-3 mb-10">
+                <li className="flex items-center text-sm whitespace-nowrap gap-2">
+                    <p>Order</p>
+                    <select className={styles.select} value={order} onChange={(e) => setOrder(e.target.value)}>
+                        {ORDER.map((order) => (
+                            <option key={order} value={order}>
+                                {order}
+                            </option>
+                        ))}
+                    </select>
+                </li>
+                <li className="flex items-center text-sm whitespace-nowrap gap-2">
+                    <p>Current decade</p>
+                    <select className={styles.select} value={selectedDecade} onChange={(e) => setSelectedDecade(parseInt(e.target.value))}>
+                        {DECADES.map((decade) => (
+                            <option key={decade} value={decade}>
+                                {decade}
+                            </option>
+                        ))}
+                    </select>
+                </li>
+                <li className="flex items-center text-sm whitespace-nowrap gap-2">
+                    <p>Business categories</p>
+                    <select className={styles.select} value={selectedBusinessCategory} onChange={event => setSelectedBusinessCategory(event.target.value)}>
+                        {businessCategories.map((item: string, index: number) => <option key={index}>{item}</option>)}
+                    </select>
+                </li>
+                <li className="flex items-center text-sm whitespace-nowrap gap-2">
+                    <p>Asset names</p>
+                    <select className={styles.select} value={selectedAssetName} onChange={event => setSelectedAssetName(event.target.value)}>
+                        {assetNames.map((item: string, index: number) => <option key={index}>{item}</option>)}
+                    </select>
+                </li>
+                <li className="flex items-center text-sm whitespace-nowrap gap-2">
+                    <p>Risk factors</p>
+                    <select className={styles.select} value={selectedRiskFactor} onChange={event => setSelectedRiskFactor(event.target.value)}>
+                        {RISK_FACTORS.map((item: string, index: number) => <option key={index}>{item}</option>)}
+                    </select>
+                    <input type='range' value={selectedRiskFactorIndex} onChange={event => setSelectedRiskFactorIndex(Number(event.target.value))} max={1} min={0} step={0.1} />
+                    <b>{selectedRiskFactorIndex}</b>
+                </li>
+            </ul>
+            <div className="flex flex-col">
+                <div className="overflow-x-auto sm:mx-0.5 lg:mx-0.5">
+                    <div className="inline-block min-w-full">
+                        <div className="overflow-hidden">
+                            <table className="min-w-full">
+                                <thead className="bg-white border-b">
+                                    <tr>
+                                        <th className={styles.th}>Asset name</th>
+                                        <th className={styles.th}>Business Category</th>
+                                        <th className={styles.th}>Lat</th>
+                                        <th className={styles.th}>Long</th>
+                                        <th className={styles.th}>Risk rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentData.map((item, index: number) => <tr key={index}>
+                                        <td className={styles.td}>{item["Asset Name"]}</td>
+                                        <td className={styles.td}>{item["Business Category"]}</td>
+                                        <td className={styles.td}>{item.Lat}</td>
+                                        <td className={styles.td}>{item.Long}</td>
+                                        <td className={styles.td}>{item["Risk Rating"]}</td>
+                                    </tr>)}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div className='flex items-center justify-center py-3'>
-                        <ul className="flex items-center gap-3 max-w-2xl overflow-x-scroll">
-                            {renderPageNumbers()}
-                        </ul>
-                    </div>
+                </div>
+                <div className='flex items-center justify-center py-3'>
+                    <ul className="flex items-center gap-3 max-w-2xl overflow-x-scroll">
+                        {renderPageNumbers()}
+                    </ul>
                 </div>
             </div>
-            <Graph />
         </div>
     )
 }
