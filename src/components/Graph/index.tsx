@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { LineChart, Line, Tooltip, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useStore } from '@/store';
 import { ClimateRiskData, State } from '@/interfaces';
+import React from 'react';
 
 const Graph: FC = () => {
     const selectedAsset = useStore((state: State) => state.selectedAsset)
